@@ -22,6 +22,10 @@ const superagent = require('superagent');
 
 app.get('/weather', handleWeather);
 
+app.get('/', (req, res) =>{
+  res.send('hello world');
+});
+
 app.use('*', (req, res) => {
   res.status(404).send('404 Page Not Found');
 });
