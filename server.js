@@ -59,6 +59,4 @@ function Forecast(obj, city) {
 
 
 
-
-
 app.listen(port, () => console.log(`listening on #${port}`));
