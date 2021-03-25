@@ -11,7 +11,6 @@ const cors = require('cors');
 const port = process.env.PORT;
 
 app.use(cors());
-
 const superagent = require('superagent');
 
 //  serv start
@@ -27,21 +26,28 @@ app.use('*', (req, res) => {
   res.status(404).send('404 Page Not Found');
 });
 
+
+
 function handleWeather(req, res) {
-  const { lat, lon} = req.query;
-  console.log(lat, lon, process.env.WEATHER_API_KEY);
-  const url = `https://api.weatherbit.io/v2.0/forecast/daily?lat={lat}&lon={lon}&key={process.env.WEATHER_API_KEY}&days=8`;
+  const url = 'https://api.weatherbit.io/v2.0/forecast/daily';
+  console.log(req.query);
+  const query = {
+    key: process.env.WEATHER_API_KEY,
+    lat: req.query.lat,
+    lon: req.query.lon
+  };
+
 
   superagent
     .get(url)
-    .query(lat, lon)
+    .query(query)
     .then(superagentResults => {
-      const newForcast = superagentResults.body.map(agent => {
-        return new Forecast(agent);
+      const newResults = superagentResults.body.data;
+      const finalForecast = newResults.map(day => {
+        return new Forecast(day);
       });
-      res.status(200).send(newForcast);
+      res.status(200).send(finalForecast);
     });
-
 }
 
 
@@ -53,16 +59,6 @@ function Forecast(obj, city) {
 
 
 
-//   try{
-//     const forcastArr = weather.data.map(day => {
-//       return new Forecast(day, weather.city_name, weather.lat, weather.lon);
-//     });
-//     res.status(200).send(forcastArr);
-//   } catch(error){
-//     response.status(500).send('oops! Somethings went wrong');
-//   }
-// }
 
 
-
-app.listen(port, () => console.log(`listening on ${port}`));
+app.listen(port, () => console.log(`listening on #${port}`));
