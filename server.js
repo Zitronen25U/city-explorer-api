@@ -1,33 +1,18 @@
 'use strict';
 
-const express = require('express');
-
-const app = express();
-
 require('dotenv').config();
+
+const express = require('express');
 
 const cors = require('cors');
 
-const port = process.env.PORT;
+const app = express();
 
 app.use(cors());
 
-//  serv start
-// ```
-// ```
-// ```
+const weather = require('./modules/weather.js');
 
-const handleWeather = require('./modules/handleWeather');
-
-app.get('/weather', handleWeather);
-
-app.get('/', (req, res) =>{
-  res.send('hello world');
-});
-
-app.use('*', (req, res) => {
-  res.status(404).send('404 Page Not Found');
-});
+app.get('/weather', weather);
 
 
-app.listen(port, () => console.log(`listening on #${port}`));
+app.listen(process.env.PORT, () => console.log(`Server up on ${process.env.PORT}`));
